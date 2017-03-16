@@ -1,0 +1,16 @@
+<tr>
+  <td><%= fingerprint.name %></td>
+  <td><%= fingerprint.tcp_ports %></td>
+  <td><%= fingerprint.udp_ports %></td>
+  <td><%= fingerprint.shares %></td>
+  <td>
+    <%= link_to edit_fingerprint_path(fingerprint), { class: "btn btn_link btn-xs" } do %>
+      <span class='glyphicon glyphicon-pencil'></span>
+    <% end %>
+      <button type='button' class="btn btn-link"
+              data-toggle="modal" data-target="#fingerprint_delete"
+              data-fingerprintname="<%= fingerprint.name %>" data-id="<%= fingerprint.id %>">
+        <span class='glyphicon glyphicon-remove'></span>
+      </button>
+  </td>
+</tr>

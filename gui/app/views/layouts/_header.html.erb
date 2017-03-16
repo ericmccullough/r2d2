@@ -16,6 +16,7 @@
             </div>
           <% end %>
           <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to "Fingerprints", fingerprints_path %></li>
             <li><%= link_to "Lists", lists_path %></li>
             <% if yield(:title).match('Layer') %>
               <li><%= link_to 'r2d2', '/r2d2' %></li>

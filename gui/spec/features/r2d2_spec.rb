@@ -18,6 +18,13 @@ RSpec.describe 'r2d2', type: :feature do
     it 'has the program name as the title' do
       expect(page).to have_title('Remote Rogue Device Detector')
     end
+    it 'has a link to Fingerprints' do
+      expect(page).to have_link('Fingerprints', fingerprints_path)
+    end
+    it 'then clicking the Fingerprints link takes you to the fingerprints page' do
+      click_link('Fingerprints')
+      expect(current_path).to eq('/fingerprints')
+    end
     it 'has a link to Lists' do
       expect(page).to have_link('Lists', lists_path)
     end
@@ -30,9 +37,9 @@ RSpec.describe 'r2d2', type: :feature do
     it 'has link to l2s2' do
       expect(page).to have_link('l2s2', :href => '/l2s2')
     end
-    it 'takes you to the l2s2 home page when clicking the l2s2 link' do
-      #click_link('l2s2')
-      #expect(current_path).to eq('/l2s2')
+    it 'then clicking the l2s2 link takes you to the l2s2 home page' do
+      click_link('l2s2')
+      expect(current_path).to eq('/l2s2')
     end
     it 'displays a table' do
       expect(page).to have_selector('table')
@@ -152,21 +159,20 @@ RSpec.describe 'r2d2', type: :feature do
               @server.scopes[0].leases[0].device.fingerprint = 1
               @server.scopes[0].leases[0].device.save
               visit '/r2d2'
-              within(page.all("f.#{@server.scopes[0].leases[0]}")[0]) do
-                element = all('span')[0]
-                expect(element['class']).to match(/flaticon-fingerprint21/)
-              end
+              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint21/)
             end
             it 'with an x if the fingerprint field is set to zero' do
               @server.scopes[0].leases[0].device.fingerprint = 0
               @server.scopes[0].leases[0].device.save
               visit '/r2d2'
-              within(page.all("f.#{@server.scopes[0].leases[0]}")[0]) do
-                element = all('span')[0]
-                expect(element['class']).to match(/flaticon-fingerprint20/)
-              end
+              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint26/)
             end
-            it 'with an i if hovered over'
+            it 'with an ? if the fingerprint field is set to nil' do
+              @server.scopes[0].leases[0].device.fingerprint = nil
+              @server.scopes[0].leases[0].device.save
+              visit '/r2d2'
+              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint-with-question-mark/)
+            end
           end
         end
         it 'has DHCP name' do

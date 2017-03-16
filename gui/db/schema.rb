@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161023152712) do
+ActiveRecord::Schema.define(version: 20170313024151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 20161023152712) do
   end
 
   add_index "devices", ["list_id"], name: "index_devices_on_list_id", using: :btree
+
+  create_table "fingerprints", force: :cascade do |t|
+    t.string   "tcp_ports"
+    t.string   "udp_ports"
+    t.string   "shares"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "name"
+  end
 
   create_table "glyphs", force: :cascade do |t|
     t.string   "name"

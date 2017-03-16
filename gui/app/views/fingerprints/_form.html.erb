@@ -1,0 +1,31 @@
+<div class='col-md-4 col-md-offset-2'>
+  <%= form_for(@fingerprint, :html => { :class => "form-horizontal" }) do |f| %>
+    <%= render 'error_messages' %>
+  <div class="form-group">
+    <%= f.label :name, class: 'col-sm-3' %>
+    <div class='col-sm-9'>
+      <%= f.text_field :name, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :tcp_ports, class: 'col-sm-3' %>
+    <div class='col-sm-9'>
+      <%= f.text_field :tcp_ports, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :udp_ports, class: 'col-sm-3' %>
+    <div class='col-sm-9'>
+      <%= f.text_field :udp_ports, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :shares, class: 'col-sm-3' %>
+    <div class='col-sm-9'>
+      <%= f.text_field :shares, class: 'form-control' %>
+    </div>
+  </div>
+    <%= f.submit "Save", class: "btn btn-primary pull-right" %>
+    <%= link_to 'Cancel', fingerprints_path, class: 'btn btn-default pull-right'%>
+  <% end %>
+</div>

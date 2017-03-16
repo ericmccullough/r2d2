@@ -1,0 +1,36 @@
+<% provide(:title, "Remote Rogue Device Detector") %>
+<% provide(:description, 'Fingerprints') %>
+<%= render 'layouts/delete_fingerprint_modal' %>
+<div class='row'>
+  <div class='col-md-6 col-md-offset-1'>
+    <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+    <% end %>
+    <%= link_to new_fingerprint_path, { class: "btn btn_link btn-xs" } do %>
+      <span class='glyphicon glyphicon-plus'></span>
+      Add new Fingerprint
+    <% end %>
+    <table class="table table-striped">
+      <thead><tr>
+        <th>Name</th>
+        <th>TCP Ports</th>
+        <th>UDP Ports</th>
+        <th>Action</th>
+      </tr></thead>
+      <%= render @fingerprints %>
+    </table>
+    <%= will_paginate @fingerprints %>
+  </div>
+</div>
+<script>
+  $('#fingerprint_delete').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var fingerprint = button.data('fingerprintname')
+    var fingerprint_id = button.data('id')
+    var modal = $(this)
+    modal.find('.modal-title').text("Delete Fingerprint '" + fingerprint + "'?")
+    var $submit = $(this).find('.btn-danger'), href = $submit.attr('href');
+    $submit.attr('href', href.replace('fingerprintid', fingerprint_id));
+  });
+</script>
+  

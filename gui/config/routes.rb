@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :devices, only: [:index, :show, :update]
   resources :leases, only: [:show, :index]
   resources :lists, only: [:index, :edit, :show, :update, :new, :create, :destroy]
+  resources :fingerprints, only: [:index, :edit, :new, :destroy, :create, :update] 
   get "r2d2" => 'leases#index'
   get "l2s2" => 'sweepers#index'
   constraints subdomain: 'api' do
