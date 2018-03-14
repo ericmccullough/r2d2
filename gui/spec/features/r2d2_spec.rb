@@ -159,20 +159,21 @@ RSpec.describe 'r2d2', type: :feature do
               @server.scopes[0].leases[0].device.fingerprint = 1
               @server.scopes[0].leases[0].device.save
               visit '/r2d2'
-              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint21/)
+              within(page.all("f.#{@server.scopes[0].leases[0]}")[0]) do
+                element = all('span')[0]
+                expect(element['class']).to match(/flaticon-fingerprint21/)
+              end
             end
             it 'with an x if the fingerprint field is set to zero' do
               @server.scopes[0].leases[0].device.fingerprint = 0
               @server.scopes[0].leases[0].device.save
               visit '/r2d2'
-              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint26/)
+              within(page.all("f.#{@server.scopes[0].leases[0]}")[0]) do
+                element = all('span')[0]
+                expect(element['class']).to match(/flaticon-fingerprint20/)
+              end
             end
-            it 'with an ? if the fingerprint field is set to nil' do
-              @server.scopes[0].leases[0].device.fingerprint = nil
-              @server.scopes[0].leases[0].device.save
-              visit '/r2d2'
-              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint-with-question-mark/)
-            end
+            it 'with an i if hovered over'
           end
         end
         it 'has DHCP name' do
