@@ -110,6 +110,6 @@ in perl -MCPAN -e shell
   install L/LD/LDS/IO-Interface-1.09.tar.gz
   install E/ET/ETHER/libwww-perl-6.15.tar.gz
 
-# may be able to use samba-client to replace Win32::NetResource  # cpan can install Win32::NetResource maybe
+# may be able to use samba-client to replace Win32::NetResource
 # http://www.vinidox.com/ldap/querying-an-ldap-server-from-the-command-line-with-ldap-utils-ldapsearch-ldapadd-ldapmodify/
 # https://www.aldeid.com/wiki/Winexe
