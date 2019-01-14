@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "API Scopes " do
   describe 'get /api/scopes/:id' do
-    let!(:list) { FactoryGirl.create(:list, name:'Unassigned') }
-    let!(:scope) { FactoryGirl.create(:scope, lease_count: 0) }
+    let!(:list) { FactoryBot.create(:list, name:'Unassigned') }
+    let!(:scope) { FactoryBot.create(:scope, lease_count: 0) }
     before(:each) do
       get "http://api.example.com/api/scopes/#{scope.id}"
     end
@@ -38,9 +38,9 @@ RSpec.describe "API Scopes " do
   end
 
   describe 'Update scope leases using PUT /scopes/:id' do
-    let!(:list) { FactoryGirl.create(:list, name:'Unassigned') }
-    let!(:scope) { FactoryGirl.create(:scope, lease_count: 0) }
-    let!(:device) { FactoryGirl.create(:device) }
+    let!(:list) { FactoryBot.create(:list, name:'Unassigned') }
+    let!(:scope) { FactoryBot.create(:scope, lease_count: 0) }
+    let!(:device) { FactoryBot.create(:device) }
     describe 'when successful' do
       it 'should return status 204' do
         put "http://api.example.com/api/scopes/#{scope.id}",
@@ -69,8 +69,8 @@ RSpec.describe "API Scopes " do
       end
 
       describe 'given an id' do
-        let!(:lease) { FactoryGirl.create(:lease, scope: scope) }
-        let!(:device2) { FactoryGirl.create(:device) }
+        let!(:lease) { FactoryBot.create(:lease, scope: scope) }
+        let!(:device2) { FactoryBot.create(:device) }
         it 'updates a lease' do
           lease_count_before = Lease.count
           lease_id = lease.id
@@ -171,8 +171,8 @@ RSpec.describe "API Scopes " do
   end
   
   describe 'get /api/scopes/:id/leases' do
-    let!(:list) { FactoryGirl.create(:list, name:'Unassigned') }
-    let!(:scope) { FactoryGirl.create(:scope, lease_count: 3) }
+    let!(:list) { FactoryBot.create(:list, name:'Unassigned') }
+    let!(:scope) { FactoryBot.create(:scope, lease_count: 3) }
     before(:each) do
       get "http://api.example.com/api/scopes/#{scope.id}/leases"
     end  

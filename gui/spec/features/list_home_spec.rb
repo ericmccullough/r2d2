@@ -50,7 +50,7 @@ RSpec.describe 'list', type: :feature do
       end
       describe 'data row' do
         before(:each) do
-          FactoryGirl.create(:device, list: List.first)
+          FactoryBot.create(:device, list: List.first)
           visit lists_path
         end
         it 'displays the list glyph' do
@@ -76,7 +76,7 @@ RSpec.describe 'list', type: :feature do
         end
         describe 'clicking the edit icon' do
           before(:each) do
-            @edit_list = FactoryGirl.create(:list)
+            @edit_list = FactoryBot.create(:list)
             visit lists_path
           end
           after(:each) { @edit_list.delete }
@@ -109,7 +109,7 @@ RSpec.describe 'list', type: :feature do
             Capybara.use_default_driver
           end
           before(:each) do
-            @delete_list = FactoryGirl.create(:list)
+            @delete_list = FactoryBot.create(:list)
             visit lists_path
             find("[data-id=\"#{@delete_list.id}\"]").click
           end
@@ -126,7 +126,7 @@ RSpec.describe 'list', type: :feature do
           end
           it 'reassigns devices to unassigned' do
             @unassigned_count_b4 = Device.where(list: List.find_by_name('Unassigned')).count
-            FactoryGirl.create(:device, list: @delete_list)
+            FactoryBot.create(:device, list: @delete_list)
             click_link('Delete')
             visit lists_path
             expect(Device.where(list: List.find_by_name('Unassigned')).count).to eq(@unassigned_count_b4+1)
@@ -145,7 +145,7 @@ RSpec.describe 'list', type: :feature do
     end
     describe 'has pagination controls when table has more than 10 rows' do
       before(:each) do
-        FactoryGirl.create_list(:list, 11)
+        FactoryBot.create_list(:list, 11)
         visit lists_path
       end
       it do

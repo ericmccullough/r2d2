@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'r2d2', type: :feature do
-  let!(:thumbs_up) { FactoryGirl.create(:glyph, name: 'glyphicon-thumbs-up') }
-  let!(:thumbs_down) { FactoryGirl.create(:glyph, name: 'glyphicon-thumbs-down') }
-  let!(:unchecked) { FactoryGirl.create(:glyph, name: 'glyphicon-unchecked') }
+  let!(:thumbs_up) { FactoryBot.create(:glyph, name: 'glyphicon-thumbs-up') }
+  let!(:thumbs_down) { FactoryBot.create(:glyph, name: 'glyphicon-thumbs-down') }
+  let!(:unchecked) { FactoryBot.create(:glyph, name: 'glyphicon-unchecked') }
 
   before(:each) do
-    FactoryGirl.create(:list, name: 'Unassigned', glyph: unchecked)
-    FactoryGirl.create(:list, name: 'Whitelist', glyph: thumbs_up)
-    FactoryGirl.create(:list, name: 'Blacklist', glyph: thumbs_down)
-    @server = FactoryGirl.create(:server, scope_count: 1)
+    FactoryBot.create(:list, name: 'Unassigned', glyph: unchecked)
+    FactoryBot.create(:list, name: 'Whitelist', glyph: thumbs_up)
+    FactoryBot.create(:list, name: 'Blacklist', glyph: thumbs_down)
+    @server = FactoryBot.create(:server, scope_count: 1)
   end
   describe 'GET /r2d2' do
     before(:each) do
@@ -19,14 +19,14 @@ RSpec.describe 'r2d2', type: :feature do
       expect(page).to have_title('Remote Rogue Device Detector')
     end
     it 'has a link to Fingerprints' do
-      expect(page).to have_link('Fingerprints', fingerprints_path)
+      expect(page).to have_link('Fingerprints', href: fingerprints_path)
     end
     it 'then clicking the Fingerprints link takes you to the fingerprints page' do
       click_link('Fingerprints')
       expect(current_path).to eq('/fingerprints')
     end
     it 'has a link to Lists' do
-      expect(page).to have_link('Lists', lists_path)
+      expect(page).to have_link('Lists', href: lists_path)
     end
     it 'has a link r2d2 to root' do
       expect(page).to have_link('Remote Rogue Device Detector', :href => '/r2d2')
@@ -70,7 +70,7 @@ RSpec.describe 'r2d2', type: :feature do
       end
       describe 'data row' do
         it 'has a link to display the details' do
-          expect(page.find_link(@server.scopes[0].leases[0].device.mac, "/leases/#{@server.scopes[0].leases[0].id}"))
+          expect(page.find_link(@server.scopes[0].leases[0].device.mac, href: "/leases/#{@server.scopes[0].leases[0].id}"))
         end
         describe 'status column displays' do
           it 'a thumbs up icon if on the whitelist' do
@@ -159,19 +159,19 @@ RSpec.describe 'r2d2', type: :feature do
               @server.scopes[0].leases[0].device.fingerprint = 1
               @server.scopes[0].leases[0].device.save
               visit '/r2d2'
-              within(page.all("f.#{@server.scopes[0].leases[0]}")[0]) do
-                element = all('span')[0]
-                expect(element['class']).to match(/flaticon-fingerprint21/)
-              end
+              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint21/)
             end
             it 'with an x if the fingerprint field is set to zero' do
               @server.scopes[0].leases[0].device.fingerprint = 0
               @server.scopes[0].leases[0].device.save
               visit '/r2d2'
-              within(page.all("f.#{@server.scopes[0].leases[0]}")[0]) do
-                element = all('span')[0]
-                expect(element['class']).to match(/flaticon-fingerprint20/)
-              end
+              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint26/)
+            end
+            it 'with an ? if the fingerprint field is set to nil' do
+              @server.scopes[0].leases[0].device.fingerprint = nil
+              @server.scopes[0].leases[0].device.save
+              visit '/r2d2'
+              expect(page.find('#F' + @server.scopes[0].leases[0].id.to_s)[:class]).to match(/fingerprint flaticon-fingerprint-with-question-mark/)
             end
             it 'with an i if hovered over'
           end
@@ -192,7 +192,7 @@ RSpec.describe 'r2d2', type: :feature do
     end
     describe 'has pagination controls when table has more than 10 rows' do
       before(:each) do
-        @server.scopes << FactoryGirl.create(:scope, lease_count: 10)
+        @server.scopes << FactoryBot.create(:scope, lease_count: 10)
         visit '/r2d2'
       end
       it do

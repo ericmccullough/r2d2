@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "API Servers" do
   describe 'get /api/servers' do
     before(:each) do
-      @servers =  FactoryGirl.create_list(:server, 3, scope_count: 0)
+      @servers =  FactoryBot.create_list(:server, 3, scope_count: 0)
       get "http://api.example.com/api/servers"
     end  
    describe 'when successful' do
@@ -49,7 +49,7 @@ RSpec.describe "API Servers" do
   end
 
   describe 'get /api/servers/:id' do
-    let!(:server) { FactoryGirl.create(:server, scope_count: 0) }
+    let!(:server) { FactoryBot.create(:server, scope_count: 0) }
     before(:each) do
       get "http://api.example.com/api/servers/#{server.id}"
     end  
@@ -71,7 +71,7 @@ RSpec.describe "API Servers" do
   end
 
   describe 'Update server scopes using PUT /api/servers/:id' do
-    let!(:server) { FactoryGirl.create(:server, scope_count: 0) }
+    let!(:server) { FactoryBot.create(:server, scope_count: 0) }
     describe 'when successful' do
       before(:each) do
         put "http://api.example.com/api/servers/#{server.id}",
@@ -189,8 +189,8 @@ RSpec.describe "API Servers" do
   end
 
   describe 'get /api/servers/:id/scopes' do
-    let!(:list) { FactoryGirl.create(:list, name:'Unassigned') }
-    let!(:server) { FactoryGirl.create(:server, scope_count: 3) }
+    let!(:list) { FactoryBot.create(:list, name:'Unassigned') }
+    let!(:server) { FactoryBot.create(:server, scope_count: 3) }
     before(:each) do
       get "http://api.example.com/api/servers/#{server.id}/scopes"
     end  

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "l2s2 sweep", type: :feature do
   describe "GET /sweeps" do
     describe 'index page' do
-      let!(:sweep) { FactoryGirl.create(:sweep) }
+      let!(:sweep) { FactoryBot.create(:sweep) }
       before(:each) do
         visit '/sweeps'
       end
@@ -64,7 +64,7 @@ RSpec.describe "l2s2 sweep", type: :feature do
       end
       describe 'big table' do
         before(:each) do
-          10.times { FactoryGirl.create(:sweep) }
+          10.times { FactoryBot.create(:sweep) }
           visit '/sweeps'
        end
         it 'should paginate if more than 10 rows' do
@@ -74,7 +74,7 @@ RSpec.describe "l2s2 sweep", type: :feature do
     end
   end
   describe 'Get /sweeps/:id' do
-    let!(:sweep) { FactoryGirl.create(:sweep) }
+    let!(:sweep) { FactoryBot.create(:sweep) }
     before(:each) { visit "/sweeps/#{sweep.id}" }
     it 'should have the sweep description in the navbar' do
       expect(page.all('.navbar-text')[0]).to have_content(sweep.description)
@@ -113,7 +113,7 @@ RSpec.describe "l2s2 sweep", type: :feature do
     end
     describe 'big table' do
       before(:each) do
-        11.times { sweep.nodes << FactoryGirl.create(:node) }
+        11.times { sweep.nodes << FactoryBot.create(:node) }
         visit "/sweeps/#{sweep.id}"
       end
       it 'should paginate if more than 10 rows' do
@@ -122,7 +122,7 @@ RSpec.describe "l2s2 sweep", type: :feature do
     end
   end
   describe 'clicking MAC of a /sweeps/:id item' do
-    let!(:sweep) { FactoryGirl.create(:sweep) }
+    let!(:sweep) { FactoryBot.create(:sweep) }
     before(:each) do
       visit "/sweeps/#{sweep.id}"
       click_link(sweep.nodes[0].mac)

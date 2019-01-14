@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Device, type: :model do
   before(:each) do
-    @list = FactoryGirl.create(:list, name: 'Unassigned')
+    @list = FactoryBot.create(:list, name: 'Unassigned')
   end
   
   describe 'is invalid if ' do

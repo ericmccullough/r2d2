@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'list', type: :feature do
   describe 'edit page' do
     before(:each) do
-      @list = FactoryGirl.create(:list)
+      @list = FactoryBot.create(:list)
       visit edit_list_path(@list)
     end
     it 'has the edit url' do
@@ -36,7 +36,7 @@ RSpec.describe 'list', type: :feature do
         expect(page).to have_content("List updated")
       end
       describe 'cannot add' do
-        before(:each) { @list2 = FactoryGirl.create(:list) }
+        before(:each) { @list2 = FactoryBot.create(:list) }
         it 'blank name' do
           fill_in 'Name', with: ''
           click_button 'Save'

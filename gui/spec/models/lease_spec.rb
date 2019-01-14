@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Lease, type: :model do
   before(:each) do
-    FactoryGirl.create(:list, name: 'Unassigned')
-    @device = FactoryGirl.create(:device)
+    FactoryBot.create(:list, name: 'Unassigned')
+    @device = FactoryBot.create(:device)
   end
   describe 'is invalid' do
     it 'if IP is empty' do

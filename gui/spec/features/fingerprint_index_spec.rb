@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'fingerprints', type: :feature do
   describe 'GET /fingerprints' do
     before(:each) do
-      FactoryGirl.create(:fingerprint)
+      FactoryBot.create(:fingerprint)
       visit fingerprints_path
     end
     it 'has the program name as the title' do
@@ -74,9 +74,10 @@ RSpec.describe 'fingerprints', type: :feature do
             Capybara.use_default_driver
           end
           before(:each) do
-            @delete_fingerprint = FactoryGirl.create(:fingerprint)
+            @delete_fingerprint = FactoryBot.create(:fingerprint)
             visit fingerprints_path
-            find("[data-id=\"#{@delete_fingerprint.id}\"]").click
+            find(:data_id, @delete_fingerprint.id).click
+            #find_button("[data-id=\"#{@delete_fingerprint.id}\"]").click
           end
           it 'displays the delete modal with "Delete Fingerprint <fingerprintname>?"' do
             expect(page).to have_content("Delete Fingerprint '#{@delete_fingerprint.name}'?")
@@ -100,7 +101,7 @@ RSpec.describe 'fingerprints', type: :feature do
     end
     describe 'has pagination controls when table has more than 10 rows' do
       before(:each) do
-        FactoryGirl.create_list(:fingerprint, 11)
+        FactoryBot.create_list(:fingerprint, 11)
         visit fingerprints_path
       end
       it do

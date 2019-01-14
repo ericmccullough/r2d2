@@ -1,6 +1,6 @@
 require 'netaddr'
 
-FactoryGirl.define do
+FactoryBot.define do
   
   sequence :name do |n|
     "list#{n}"
@@ -17,30 +17,30 @@ FactoryGirl.define do
 
   factory :fingerprint do
     name
-    tcp_ports '+4445 -80'
-    udp_ports '-123'
-    shares 'c$'
+    tcp_ports { '+4445 -80' }
+    udp_ports { '-123' }
+    shares { 'c$' }
   end
 
   factory :device do
     mac  { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join(':').to_s }
     list { List.find_by_name('Unassigned') }
-    notes Faker::Lorem.sentence(3)
-    fingerprint nil
+    notes { Faker::Lorem.sentence(3) }
+    fingerprint { nil }
   end
 
   factory :node do
     mac  { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join(':').to_s }
-    ip Faker::Internet.ip_v4_address
+    ip { Faker::Internet.ip_v4_address }
   end
 
   factory :sweep do
     cidr = (16..29).to_a
     ip = Faker::Internet.ip_v4_address
     cidr4 = NetAddr::CIDR.create("#{ip}/#{cidr.sample}")
-    description cidr4.to_s
+    description { cidr4.to_s }
     transient do
-      node_count 1
+      node_count { 1 }
     end
     ip_array = cidr4.enumerate
     after(:create) do |sweep, evaluator|
@@ -50,30 +50,30 @@ FactoryGirl.define do
   end
 
   factory :lease do
-    ip Faker::Internet.ip_v4_address
-    name 'com.example.' + Faker::Internet.user_name
-    expiration Faker::Time.between(2.days.ago, Faker::Time.forward(23, :morning))
-    kind ['D','B','U','R','N'].sample
+    ip { Faker::Internet.ip_v4_address }
+    name { 'com.example.' + Faker::Internet.user_name }
+    expiration { Faker::Time.between(2.days.ago, Faker::Time.forward(23, :morning)) }
+    kind { ['D','B','U','R','N'].sample }
     device
     #scope
   end
 
   factory :sweeper do
-    description '1.1.1.0/24'
-    ip '1.1.1.1'
+    description { '1.1.1.0/24' }
+    ip { '1.1.1.1' }
     mac { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join(':').to_s }
   end
 
   factory :scope do
     temp_ip = Faker::Internet.ip_v4_address
-    ip temp_ip
-    mask '255.255.255.0'
-    description Faker::Address.street_address
-    comment Faker::Lorem.sentence(3)
+    ip { temp_ip }
+    mask { '255.255.255.0' }
+    description { Faker::Address.street_address }
+    comment { Faker::Lorem.sentence(3) }
     cidr4 = NetAddr::CIDR.create("#{temp_ip}/24")
     ip_array = cidr4.enumerate
     transient do
-      lease_count 1
+      lease_count { 1 }
     end
     after(:create) do |scope, evaluator|
       evaluator.lease_count.times do
@@ -96,7 +96,7 @@ FactoryGirl.define do
       "192.168.1.#{i}"
     end
     transient do
-      scope_count 1
+      scope_count { 1 }
     end
     after(:create) do |server, evaluator|
       evaluator.scope_count.times do

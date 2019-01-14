@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "l2s2 sweeper", type: :feature do
   describe 'Get /sweepers/:id' do
-    let!(:sweeper) { FactoryGirl.create(:sweeper) }
+    let!(:sweeper) { FactoryBot.create(:sweeper) }
     before(:each) { visit "/sweepers/#{sweeper.id}" }
     it 'has the sweeper description in the navbar' do
       expect(page.all('.navbar-text')[0]).to have_content(sweeper.description)
@@ -25,13 +25,13 @@ RSpec.describe "l2s2 sweeper", type: :feature do
         end
       end
       describe 'data row' do
-        let!(:sweep) { FactoryGirl.create(:sweep) }
+        let!(:sweep) { FactoryBot.create(:sweep) }
         before(:each) do
-          sweep.nodes << FactoryGirl.create(:node, mac: sweeper.mac)
+          sweep.nodes << FactoryBot.create(:node, mac: sweeper.mac)
           visit "/sweepers/#{sweeper.id}"
         end
         it 'has a link to display the sweep details' do
-          expect(page.find_link(sweep.description,"/sweep/#{sweep.id}"))
+          expect(page.find_link(sweep.description,"/sweeps/#{sweep.id}"))
         end
         it 'should display the sweep descriptions' do
           expect(page.all('td')[0]).to have_content(sweep.description)
@@ -46,10 +46,10 @@ RSpec.describe "l2s2 sweeper", type: :feature do
     end
   end
   describe 'Clicking description of a /sweepers/:id item' do
-    let!(:sweeper) { FactoryGirl.create(:sweeper) }
-    let!(:sweep) { FactoryGirl.create(:sweep) }
+    let!(:sweeper) { FactoryBot.create(:sweeper) }
+    let!(:sweep) { FactoryBot.create(:sweep) }
     before(:each) do
-      sweep.nodes << FactoryGirl.create(:node, mac: sweeper.mac)
+      sweep.nodes << FactoryBot.create(:node, mac: sweeper.mac)
       visit "/sweepers/#{sweeper.id}"
       click_link(sweep.description)
     end

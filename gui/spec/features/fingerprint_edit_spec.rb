@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'fingerprint', type: :feature do
   describe 'edit page' do
     before(:each) do
-      @fingerprint = FactoryGirl.create(:fingerprint)
+      @fingerprint = FactoryBot.create(:fingerprint)
       visit edit_fingerprint_path(@fingerprint)
     end
     it 'has the edit url' do
@@ -43,7 +43,7 @@ RSpec.describe 'fingerprint', type: :feature do
           expect(page).to have_content("Fingerprint updated")
         end
         describe 'cannot add' do
-          before(:each) { @fingerprint2 = FactoryGirl.create(:fingerprint) }
+          before(:each) { @fingerprint2 = FactoryBot.create(:fingerprint) }
           it 'blank name' do
             fill_in 'Name', with: ''
             click_button 'Save'

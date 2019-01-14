@@ -4,7 +4,7 @@ RSpec.describe 'sweeper', type: :feature do
   describe 'edit page' do
   end
   before(:each) do
-    @sweeper = FactoryGirl.create(:sweeper)
+    @sweeper = FactoryBot.create(:sweeper)
     visit edit_sweeper_path(@sweeper)
   end
   it 'has the edit url' do

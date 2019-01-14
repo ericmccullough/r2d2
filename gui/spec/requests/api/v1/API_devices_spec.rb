@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe "API Devices" do
   describe 'get /api/device/:mac' do
-    let!(:list) { FactoryGirl.create(:list, name:'Unassigned') }
+    let!(:list) { FactoryBot.create(:list, name:'Unassigned') }
     describe 'when successful' do
       describe 'for an existing device' do
-        let!(:device) { FactoryGirl.create(:device) }
+        let!(:device) { FactoryBot.create(:device) }
         before(:each) do
           get "http://api.example.com/api/devices/#{device.mac}"
         end

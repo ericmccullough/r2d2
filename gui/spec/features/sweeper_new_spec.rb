@@ -15,7 +15,7 @@ RSpec.describe 'sweeper', type: :feature do
           expect(page).to have_content("Mac can't be blank")
         end
         it 'duplicate MAC' do
-          sweep = FactoryGirl.create(:sweeper, mac: '11:22:33:44:55:66')
+          sweep = FactoryBot.create(:sweeper, mac: '11:22:33:44:55:66')
           fill_in 'sweeper_mac', with: sweep.mac
           click_button 'Save'
           expect(page).to have_content("Mac has already been taken")

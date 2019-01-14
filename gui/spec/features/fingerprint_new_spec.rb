@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'fingerprint', type: :feature do
   describe 'new page' do
     before(:each) do
-      @fingerprint = FactoryGirl.create(:fingerprint)
+      @fingerprint = FactoryBot.create(:fingerprint)
       visit new_fingerprint_path
     end
     it 'has the new url' do

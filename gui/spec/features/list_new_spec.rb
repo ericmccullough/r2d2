@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe 'list', type: :feature do
   describe 'new page' do
     before(:each) do
-      FactoryGirl.create(:glyph, name: 'glyphicon-warning-sign')
-      FactoryGirl.create(:glyph, name: 'glyphicon-star')
-      @list = FactoryGirl.create(:list)
+      FactoryBot.create(:glyph, name: 'glyphicon-warning-sign')
+      FactoryBot.create(:glyph, name: 'glyphicon-star')
+      @list = FactoryBot.create(:list)
       visit new_list_path
     end
     it 'has the new url' do

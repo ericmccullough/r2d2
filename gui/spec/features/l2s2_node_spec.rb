@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "l2s2 node/:id", type: :feature do
   describe "GET /nodes/:id" do
-    let!(:sweep) { FactoryGirl.create(:sweep) }
+    let!(:sweep) { FactoryBot.create(:sweep) }
     before(:each) do
       visit "/nodes/#{sweep.nodes[0].id}"
     end
@@ -26,7 +26,7 @@ RSpec.describe "l2s2 node/:id", type: :feature do
           expect(page.all('td')[0]).to have_content(sweep.description)
         end
         it 'should have a link to the Sweep' do
-          expect(page.find_link(sweep.description,"/sweeps/#{sweep.id}"))
+          expect(page).to have_link(sweep.description, :href => "/sweeps/#{sweep.id}")
         end
         it 'should display the Sweep timestamp' do
           expect(page.all('td')[1]).to have_content(sweep.nodes[0].created_at)

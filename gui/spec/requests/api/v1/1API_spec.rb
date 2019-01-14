@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe "API Devices" do
   describe 'Update scope leases using PUT /scopes/:id' do
-  let!(:list) { FactoryGirl.create(:list, name:'Unassigned') }
-  let!(:scope) { FactoryGirl.create(:scope, lease_count: 0) }
-  let!(:device) { FactoryGirl.create(:device) }
+  let!(:list) { FactoryBot.create(:list, name:'Unassigned') }
+  let!(:scope) { FactoryBot.create(:scope, lease_count: 0) }
+  let!(:device) { FactoryBot.create(:device) }
     describe 'when successful' do
       describe 'given an id' do
-        let!(:lease) { FactoryGirl.create(:lease, scope: scope) }
-        let!(:device2) { FactoryGirl.create(:device) }
+        let!(:lease) { FactoryBot.create(:lease, scope: scope) }
+        let!(:device2) { FactoryBot.create(:device) }
         it 'updates a lease' do
           lease_count_before = Lease.count
           lease_ip_before = lease.ip
