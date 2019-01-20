@@ -68,32 +68,122 @@ RSpec.describe "API Scopes " do
         expect(response.body.length).to eq(0)
       end
 
-      describe 'given an id' do
+      describe 'given a lease id' do
         let!(:lease) { FactoryBot.create(:lease, scope: scope) }
         let!(:device2) { FactoryBot.create(:device) }
-        it 'updates a lease' do
-          lease_count_before = Lease.count
-          lease_id = lease.id
-          put "http://api.example.com/api/scopes/#{scope.id}",
-            { scope:
-              { id: scope.id, 
-                leases_attributes:
-                [{ id: lease_id, ip: '2.1.1.0', expiration: '2', kind: 'D', name: 'fred', mask: '255.255.255.2', device_id: device2.id }]
-              }
-            }.to_json,
-            { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
-          expect(Lease.count).to eq(lease_count_before)
-          lease = Lease.find(lease_id)
-          expect(lease.ip).to eq('2.1.1.0')
-          expect(lease.expiration).to eq('2')
-          expect(lease.kind).to eq('D')
-          expect(lease.name).to eq('fred')
-          expect(lease.mask).to eq('255.255.255.2')
-          expect(lease.device_id).to eq(device2.id)
+        let!(:node) { FactoryBot.create(:node) }
+        describe 'updates only the changed' do
+          before(:each) do
+            @lease_count_before = Lease.count
+            @lease_ip_before = lease.ip
+            @lease_expiration_before = lease.expiration
+            @lease_kind_before = lease.kind
+            @lease_name_before = lease.name
+            @lease_mask_before = lease.mask
+            @lease_device_before = lease.device.id
+            @lease_id = lease.id
+          end
+          it 'ip field' do
+            put "http://api.example.com/api/scopes/#{scope.id}",
+              { scope:
+                { id: scope.id, 
+                  leases_attributes:
+                  [{ id: @lease_id, ip: node.ip }]
+                }
+              }.to_json,
+              { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
+            expect(Lease.count).to eq(@lease_count_before)
+            lease = Lease.find(@lease_id)
+            expect(lease.ip).to eq(node.ip)
+            expect(lease.expiration).to eq(@lease_expiration_before)
+            expect(lease.kind).to eq(@lease_kind_before)
+            expect(lease.name).to eq(@lease_name_before)
+            expect(lease.mask).to eq(@lease_mask_before)
+            expect(lease.device_id).to eq(@lease_device_before)
+            expect(response.status).to eq(204)
+          end
+          it 'expiration field' do
+            put "http://api.example.com/api/scopes/#{scope.id}",
+              { scope:
+                { id: scope.id, 
+                  leases_attributes:
+                  [{ id: @lease_id, ip: lease.ip, expiration: '2', kind: lease.kind, name: lease.name, mask: lease.mask, device_id: lease.device.id }]
+                }
+              }.to_json,
+              { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
+            expect(Lease.count).to eq(@lease_count_before)
+            lease = Lease.find(@lease_id)
+            expect(lease.ip).to eq(@lease_ip_before)
+            expect(lease.expiration).to eq('2')
+            expect(lease.kind).to eq(@lease_kind_before)
+            expect(lease.name).to eq(@lease_name_before)
+            expect(lease.mask).to eq(@lease_mask_before)
+            expect(lease.device_id).to eq(@lease_device_before)
+            expect(response.status).to eq(204)
+          end
+          it 'kind field' do
+            new_kind = 'DBURN'.slice!(@lease_kind_before).split('').sample
+            put "http://api.example.com/api/scopes/#{scope.id}",
+              { scope:
+                { id: scope.id, 
+                  leases_attributes:
+                  [{ id: @lease_id, ip: lease.ip, expiration: lease.expiration, kind: new_kind, name: lease.name, mask: lease.mask, device_id: lease.device.id }]
+                }
+              }.to_json,
+              { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
+            expect(Lease.count).to eq(@lease_count_before)
+            lease = Lease.find(@lease_id)
+            expect(lease.ip).to eq(@lease_ip_before)
+            expect(lease.expiration).to eq(@lease_expiration_before)
+            expect(lease.kind).to eq(@lease_kind_before)
+            expect(lease.name).to eq(@lease_name_before)
+            expect(lease.mask).to eq(@lease_mask_before)
+            expect(lease.device_id).to eq(@lease_device_before)
+            expect(response.status).to eq(204)
+          end
+          it 'name field' do
+            new_name = lease.name+'1'
+            put "http://api.example.com/api/scopes/#{scope.id}",
+              { scope:
+                { id: scope.id, 
+                  leases_attributes:
+                  [{ id: @lease_id, ip: lease.ip, expiration: lease.expiration, kind: lease.kind, name: new_name, mask: lease.mask, device_id: lease.device.id }]
+                }
+              }.to_json,
+              { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
+            expect(Lease.count).to eq(@lease_count_before)
+            lease = Lease.find(@lease_id)
+            expect(lease.ip).to eq(@lease_ip_before)
+            expect(lease.expiration).to eq(@lease_expiration_before)
+            expect(lease.kind).to eq(@lease_kind_before)
+            expect(lease.name).to eq(new_name)
+            expect(lease.mask).to eq(@lease_mask_before)
+            expect(lease.device_id).to eq(@lease_device_before)
+            expect(response.status).to eq(204)
+          end
+          it 'device id field' do
+            put "http://api.example.com/api/scopes/#{scope.id}",
+              { scope:
+                { id: scope.id, 
+                  leases_attributes:
+                  [{ id: @lease_id, ip: lease.ip, expiration: lease.expiration, kind: lease.kind, name: lease.name, mask: lease.mask, device_id: device2.id }]
+                }
+              }.to_json,
+              { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
+            expect(Lease.count).to eq(@lease_count_before)
+            lease = Lease.find(@lease_id)
+            expect(lease.ip).to eq(@lease_ip_before)
+            expect(lease.expiration).to eq(@lease_expiration_before)
+            expect(lease.kind).to eq(@lease_kind_before)
+            expect(lease.name).to eq(@lease_name_before)
+            expect(lease.mask).to eq(@lease_mask_before)
+            expect(lease.device_id).to eq(device2.id)
+            expect(response.status).to eq(204)
+          end
         end
       end
-    
-      it 'creates a lease if there is no id' do
+      
+      it 'creates a lease if there is no lease id' do
         lease_count_before = Lease.count
         put "http://api.example.com/api/scopes/#{scope.id}",
           { scope:
@@ -105,7 +195,7 @@ RSpec.describe "API Scopes " do
         expect(Lease.count).to eq(lease_count_before + 1)
       end
     
-      it 'creates multiple leases if there is no id' do
+      it 'creates multiple leases if there are no lease ids' do
         lease_count_before = Lease.count
         put "http://api.example.com/api/scopes/#{scope.id}",
           { scope:
@@ -120,7 +210,7 @@ RSpec.describe "API Scopes " do
     end
 
     describe 'when unsuccessful' do
-      it 'should NOT create a scope' do
+      it 'should NOT create a scope' do # invalid lease - ip is ''
         lease_count_before = Lease.count
         put "http://api.example.com/api/scopes/#{scope.id}",
           { scope:
