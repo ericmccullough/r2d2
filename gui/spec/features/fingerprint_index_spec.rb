@@ -32,8 +32,11 @@ RSpec.describe 'fingerprints', type: :feature do
         it 'has a upd_ports column' do
           expect(page.all('th')[2]).to have_content('UDP Ports')
         end
+        it 'has a shares column' do
+          expect(page.all('th')[3]).to have_content('Shares')
+        end
         it 'has an Action column' do
-          expect(page.all('th')[3]).to have_content('Action')
+          expect(page.all('th')[4]).to have_content('Action')
         end
       end
       describe 'data row' do
@@ -45,6 +48,9 @@ RSpec.describe 'fingerprints', type: :feature do
         end
         it 'displays the UDP ports' do
           expect(page.all('td')[2]).to have_content(Fingerprint.first.udp_ports)
+        end
+        it 'displays the shares' do
+          expect(page.all('td')[3]).to have_content(Fingerprint.first.shares)
         end
         it 'displays the edit icon' do
           within(page.all('td')[4]) do
