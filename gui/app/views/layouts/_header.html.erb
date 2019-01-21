@@ -15,9 +15,18 @@
               </button>
             </div>
           <% end %>
+          <ul class="nav navbar-form navbar-right">
+            <li class="dropdown">
+              <button type='button' class="btn btn-link" id="setupdropdownMenu" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-menu-hamburger"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="setupdropdownMenu">
+                <li><%= link_to "Fingerprints", fingerprints_path %></li>
+                <li><%= link_to "Lists", lists_path %></li>
+              </ul>
+            </li>
+          </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to "Fingerprints", fingerprints_path %></li>
-            <li><%= link_to "Lists", lists_path %></li>
             <% if yield(:title).match('Layer') %>
               <li><%= link_to 'r2d2', '/r2d2' %></li>
             <% else %>

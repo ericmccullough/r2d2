@@ -18,15 +18,29 @@ RSpec.describe 'r2d2', type: :feature do
     it 'has the program name as the title' do
       expect(page).to have_title('Remote Rogue Device Detector')
     end
-    it 'has a link to Fingerprints' do
-      expect(page).to have_link('Fingerprints', href: fingerprints_path)
-    end
-    it 'then clicking the Fingerprints link takes you to the fingerprints page' do
-      click_link('Fingerprints')
-      expect(current_path).to eq('/fingerprints')
-    end
-    it 'has a link to Lists' do
-      expect(page).to have_link('Lists', href: lists_path)
+    describe 'has a dropdown' do
+      it 'for Setup' do
+        expect(page).to have_button('setupdropdownMenu')
+      end
+      describe 'when clicked' do
+        before(:each) do
+          click_button('setupdropdownMenu')
+        end
+        it 'has a link to Fingerprints' do
+          expect(page).to have_link('Fingerprints', href: fingerprints_path)
+        end
+        it 'then clicking the Fingerprints link takes you to the fingerprints page' do
+          click_link('Fingerprints')
+          expect(current_path).to eq('/fingerprints')
+        end
+        it 'has a link to Lists' do
+          expect(page).to have_link('Lists', href: lists_path)
+        end
+        it 'then clicking the Lists link takes you to the lists page' do
+          click_link('Lists')
+          expect(current_path).to eq('/lists')
+        end
+      end
     end
     it 'has a link r2d2 to root' do
       expect(page).to have_link('Remote Rogue Device Detector', :href => '/r2d2')
@@ -109,7 +123,7 @@ RSpec.describe 'r2d2', type: :feature do
               visit '/r2d2'
               link_id = @server.scopes[0].leases[0].id.to_s
               find("#L#{link_id}").click
-              within(page.all('ul.dropdown-menu')[0]) do
+              within(page.all('ul.dropdown-menu')[1]) do
                 i = 0
                 List.all.each do |l|
                   expect(all('li')[i]).to have_content(l.name)
@@ -123,7 +137,7 @@ RSpec.describe 'r2d2', type: :feature do
               visit '/r2d2'
               link_id = @server.scopes[0].leases[0].id.to_s
               find("#L#{link_id}").click
-              within(page.all('ul.dropdown-menu')[0]) do
+              within(page.all('ul.dropdown-menu')[1]) do
                 click_link('Blacklist')
               end
               @server.reload
@@ -135,7 +149,7 @@ RSpec.describe 'r2d2', type: :feature do
               visit '/r2d2'
               link_id = @server.scopes[0].leases[0].id.to_s
               find("#L#{link_id}").click
-              within(page.all('ul.dropdown-menu')[0]) do
+              within(page.all('ul.dropdown-menu')[1]) do
                 click_link('Whitelist')
               end
               @server.reload
@@ -147,7 +161,7 @@ RSpec.describe 'r2d2', type: :feature do
               visit '/r2d2'
               link_id = @server.scopes[0].leases[0].id.to_s
               find("#L#{link_id}").click
-              within(page.all('ul.dropdown-menu')[0]) do
+              within(page.all('ul.dropdown-menu')[1]) do
                 click_link('Unassigned')
               end
               @server.reload
