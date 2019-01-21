@@ -380,28 +380,3 @@ sub update_lease {
       print "HTTP PUT lease error message: ", $resp->message, "\n";
   }  
 }
-
-sub update_db {
-  my $json = shift;
-  my $ua = LWP::UserAgent->new;
-  my $server_endpoint = "http://api.r2d2.com:3000/api/sweeps";
-  #my $server_endpoint = "https://api.strong-stone-3754.herokuapp.com/sweeps"; # does this work?
-
-  # set custom HTTP request header fields
-  my $req = HTTP::Request->new(POST => $server_endpoint);
-  $req->header('content-type' => 'application/json');
-  $req->header('Accept' => 'application/json');
-  
-  # add POST data to HTTP request body
-  my $post_data = $json;
-  $req->content($post_data);
-  
-  my $resp = $ua->request($req);
-  if ($resp->is_success) {
-      my $message = $resp->decoded_content;
-      #print "Received reply: $message\n";
-  } else {
-      print "HTTP POST error code: ", $resp->code, "\n";
-      print "HTTP POST error message: ", $resp->message, "\n";
-  }
-}
