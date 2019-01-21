@@ -112,8 +112,7 @@ sub update_db {
   if ($resp->is_success) {
       my $message = $resp->decoded_content;
       print "Received reply: $message\n";
-  }
-  else {
+  } else {
       print "HTTP POST error code: ", $resp->code, "\n";
       print "HTTP POST error message: ", $resp->message, "\n";
   }
