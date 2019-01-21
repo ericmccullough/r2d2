@@ -2,7 +2,7 @@
   <td><%=link_to lease.device.mac, "/leases/#{lease.id}"%></td>
   <td>
     <div class='dropdown'>
-      <a id='L<%=lease.id%>' class="dropdown-toggle" data-toggle="dropdown" data-target="#" role="button" aria-haspopup="true" aria-expanded="false">
+      <a id='L<%=lease.id%>' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
         <% if lease.device.list.name.match('Unassigned') %>
           <% list_color = 'text-primary' %>
         <% elsif lease.device.list.name.match('Whitelist') %>
