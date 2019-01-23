@@ -73,12 +73,6 @@ RSpec.describe 'fingerprints', type: :feature do
           end
         end
         describe 'clicking the delete icon', :js => true do
-          before(:all) do
-            Capybara.current_driver = :webkit
-          end
-          after(:all) do
-            Capybara.use_default_driver
-          end
           before(:each) do
             @delete_fingerprint = FactoryBot.create(:fingerprint)
             visit fingerprints_path
