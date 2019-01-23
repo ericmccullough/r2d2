@@ -1,0 +1,34 @@
+<% provide(:title, "Remote Rogue Device Detector") %>
+<% provide(:description, 'Servers') %>
+<%= render 'layouts/delete_server_modal' %>
+<div class='row'>
+  <div class='col-md-6 col-md-offset-1'>
+    <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+    <% end %>
+    <%= link_to new_server_path, { class: "btn btn_link btn-xs" } do %>
+      <span class='glyphicon glyphicon-plus'></span>
+      Add new Server
+    <% end %>
+    <table class="table table-striped">
+      <thead><tr>
+        <th>Name</th>
+        <th>IP</th>
+        <th>Action</th>
+      </tr></thead>
+      <%= render @servers %>
+    </table>
+    <%= will_paginate @servers %>
+  </div>
+</div>
+<script>
+  $('#server_delete').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var server = button.data('servername')
+    var server_id = button.data('id')
+    var modal = $(this)
+    modal.find('.modal-title').text("Delete Server '" + server + "'?")
+    var $submit = $(this).find('.btn-danger'), href = $submit.attr('href');
+    $submit.attr('href', href.replace('serverid', server_id));
+  });
+</script>

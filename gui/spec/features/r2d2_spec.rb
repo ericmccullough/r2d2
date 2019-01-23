@@ -40,6 +40,13 @@ RSpec.describe 'r2d2', type: :feature do
           click_link('Lists')
           expect(current_path).to eq('/lists')
         end
+        it 'has a link to Servers' do
+          expect(page).to have_link('Servers', href: servers_path)
+        end
+        it 'then clicking the Lists link takes you to the lists page' do
+          click_link('Servers')
+          expect(current_path).to eq('/servers')
+        end
       end
     end
     it 'has a link r2d2 to root' do
