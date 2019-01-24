@@ -43,4 +43,9 @@ RSpec.describe Lease, type: :model do
   end
   it 'belongs to a scope'
   it 'has a name'
+  it 'removes the associated device if deleted' do
+    device = FactoryBot.create(:device)
+    lease = Lease.create(ip: '1.1.1.1', device: device, expiration: Faker::Time)
+    expect {lease.destroy}.to change{Device.count}.by(-1)
+  end
 end

@@ -10,29 +10,29 @@ RSpec.describe 'server', type: :feature do
     it 'has the new url' do
       expect(current_path).to eq(new_server_path)
     end
-    describe 'filling out from to add a server' do
-      describe 'cannot add' do
-        it 'blank name' do
+    describe 'filling out form to add a server' do
+      describe 'cannot add with' do
+        it 'a blank name' do
           server_count = Server.count
           click_button 'Save'
           expect(page).to have_content("Name can't be blank")
           expect(Server.count).to eq(server_count)
         end
-        it 'duplicate name' do
+        it 'a duplicate name' do
           server_count = Server.count
           fill_in 'Name', with: @server.name
           click_button 'Save'
           expect(page).to have_content("Name has already been taken")
           expect(Server.count).to eq(server_count)
         end
-        it 'case-insensitive duplicate name' do
+        it 'a case-insensitive duplicate name' do
           server_count = Server.count
           fill_in 'Name', with: @server.name.upcase
           click_button 'Save'
           expect(page).to have_content("Name has already been taken")
           expect(Server.count).to eq(server_count)
         end
-        it 'with invalid IP' do
+        it 'an invalid IP' do
           server_count = Server.count
           fill_in 'Name', with: 'invalid_ip_test'
           fill_in 'server_ip', with: 'web'
@@ -40,7 +40,7 @@ RSpec.describe 'server', type: :feature do
           expect(page).to have_content("Ip is invalid")
           expect(Server.count).to eq(server_count)
         end
-        it 'with no IP' do
+        it 'no IP' do
           server_count = Server.count
           fill_in 'Name', with: 'invalid_ip_test'
           fill_in 'server_ip', with: ''
@@ -48,18 +48,13 @@ RSpec.describe 'server', type: :feature do
           expect(page).to have_content("Ip is invalid")
           expect(Server.count).to eq(server_count)
         end
-        it 'duplicate ip' do
+        it 'a duplicate ip' do
           server_count = Server.count
           fill_in 'Name', with: 'duplicate_ip_test'
           fill_in 'server_ip', with: @server.ip
           click_button 'Save'
           expect(page).to have_content("Ip has already been taken")
           expect(Server.count).to eq(server_count)
-        end
-        it 'stays on the new server page' do
-          fill_in 'Name', with: "Fred's Angels"
-          click_button 'Save'
-          expect(current_path).to eq(new_server_path)
         end
       end
       describe 'adds the server to servers' do

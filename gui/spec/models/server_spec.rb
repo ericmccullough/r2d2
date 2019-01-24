@@ -37,11 +37,29 @@ RSpec.describe Server, type: :model do
     end
   end
   describe 'destroys dependent' do
-    scope = Scope.create(ip: '1.1.1.1', mask: '255.0.0.0')
-    server = Server.create(ip: '1.1.1.1', name: 'server1')
-    server.scopes << scope
+    before(:each) do
+      FactoryBot.create(:list, name: 'Unassigned')
+      device = FactoryBot.create(:device)
+      @device_count = Device.count
+      lease = Lease.create(ip: '1.1.1.1', device: device, expiration: Faker::Time)
+      @lease_count = Lease.count
+      scope = Scope.create(ip: '1.1.1.1', mask: '255.0.0.0')
+      scope.leases << lease
+      @scope_count = Scope.count
+      server = Server.create(ip: '1.1.1.2', name: 'server1')
+      server.scopes << scope
+      #server_count = Server.count
+      server.destroy
+    end
     it 'scopes' do
-      expect {server.destroy}.to change{Scope.count}.by(-1)
+      #expect(Server.count).to eq(server_count-1)
+      expect(Scope.count).to eq(@scope_count-1)
+    end
+    it 'leases' do
+      expect(Lease.count).to eq(@lease_count-1)
+    end
+    it 'devices' do
+      expect(Device.count).to eq(@device_count-1)
     end
   end
 end

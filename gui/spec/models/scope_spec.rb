@@ -31,4 +31,12 @@ RSpec.describe Scope, type: :model do
       expect(scope2).to be_invalid
     end
   end
+  it 'removes the associated Lease if deleted' do
+    FactoryBot.create(:list, name: 'Unassigned')
+    device = FactoryBot.create(:device)
+    lease = Lease.create(ip: '1.1.1.1', device: device, expiration: Faker::Time)
+    scope = Scope.new(ip: '1.1.1.1', mask: '255.0.0.0')
+    scope.leases << lease
+    expect {scope.destroy}.to change{Lease.count}.by(-1)
+  end
 end
