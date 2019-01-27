@@ -40,11 +40,11 @@ RSpec.describe 'sweeper', type: :feature do
         end
         it 'displays success message' do
           click_button 'Save'
-          expect(page).to have_content("Added new sweeper 11:22:33:44:55:66")
+          expect(page).to have_content("Added new sweeper 112233445566")
         end
         it 'saves the MAC' do
           click_button 'Save'
-          expect(Sweeper.find_by_mac('11:22:33:44:55:66').valid?).to eq(true)
+          expect(Sweeper.find_by_mac('112233445566').valid?).to eq(true)
         end
         it 'saves the IP' do
           click_button 'Save'

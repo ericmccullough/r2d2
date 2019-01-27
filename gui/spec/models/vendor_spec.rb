@@ -38,4 +38,9 @@ RSpec.describe Vendor, type: :model do
       expect(@vendor).to be_valid
     end
   end
+  it 'upper cases the OUI' do
+    vendor = Vendor.new(name: 'company', oui: 'abcdef')
+    expect(vendor.oui).to eq('ABCDEF')
+  end
+  it 'removes non-hex chars?'
 end

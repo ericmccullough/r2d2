@@ -4,5 +4,7 @@ class Vendor < ActiveRecord::Base
   validates :oui, presence: true,
                   format: { with: VALID_OUI_REGEX },
                   uniqueness: true
-                  
+  def oui=(val)
+    write_attribute :oui, val.upcase
+  end
 end

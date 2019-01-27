@@ -30,7 +30,7 @@ RSpec.describe "API" do
       end
 
       it 'should create a node'do
-        expect(Node.find_by_mac('00:11:22:33:44:55').id).to be_truthy
+        expect(Node.find_by_mac('001122334455').id).to be_truthy
       end
       
       it 'should create all devices' do
@@ -41,9 +41,9 @@ RSpec.describe "API" do
             }
           }.to_json,
           { 'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s }
-        expect(Node.find_by_mac('00:11:22:33:44:66').id).to be_truthy
+        expect(Node.find_by_mac('001122334466').id).to be_truthy
         expect(Node.find_by_ip('1.1.1.1').id).to be_truthy
-        expect(Node.find_by_mac('00:11:22:33:44:55').id).to be_truthy
+        expect(Node.find_by_mac('001122334455').id).to be_truthy
         expect(Node.find_by_ip('1.1.1.2').id).to be_truthy
       end
     end

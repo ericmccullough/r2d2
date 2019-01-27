@@ -30,6 +30,12 @@ RSpec.describe Device, type: :model do
       device = Device.new(mac: '00:1f:f3:cd:62:g2', list: @list)
       expect(device).to be_invalid
     end
+
+    it "if it is not unique" do
+      device = Device.create(mac: '00:1f:f3:cd:62:f2', list: @list)
+      duplicate_device = Device.new(mac: device.mac)
+      expect(duplicate_device).to be_invalid
+    end
   end
   
   it 'is valid if the MAC and list are valid' do
@@ -37,10 +43,14 @@ RSpec.describe Device, type: :model do
     expect(device).to be_valid
   end
 
-  it "is unique" do
-    device = Device.create(mac: '00:1f:f3:cd:62:f2', list: @list)
-    duplicate_device = Device.new(mac: device.mac)
-    expect(duplicate_device).to be_invalid
+  it 'converts the MAC to upper case' do
+    device = Device.new(mac: '00:1f:f3:cd:62:f2', list: @list)
+    expect(device.mac).to eq('001FF3CD62F2')
+  end
+  
+  it 'removes punctuation from the MAC' do
+    device = Device.new(mac: '00:1f:f3:cd:62:f2', list: @list)
+    expect(device.mac).to eq('001FF3CD62F2')
   end
 
   it 'has a notes field' do
@@ -65,4 +75,6 @@ RSpec.describe Device, type: :model do
     device = Device.create(mac: '00:1f:f3:cd:62:f2', list: @list)
     expect(device.vendor).to eq('UNKNOWN')
   end
+  
+  it 'can have a fingerprint assigned'
 end

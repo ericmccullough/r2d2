@@ -23,14 +23,14 @@ FactoryBot.define do
   end
 
   factory :device do
-    mac  { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join(':').to_s }
+    mac  { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join('').to_s }
     list { List.find_by_name('Unassigned') }
     notes { Faker::Lorem.sentence(3) }
     fingerprint { nil }
   end
 
   factory :node do
-    mac  { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join(':').to_s }
+    mac  { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join('').to_s }
     ip { Faker::Internet.ip_v4_address }
   end
 
@@ -61,7 +61,7 @@ FactoryBot.define do
   factory :sweeper do
     description { '1.1.1.0/24' }
     ip { '1.1.1.1' }
-    mac { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join(':').to_s }
+    mac { 6.times.map{ rand(256) }.map{ |d| '%02x' % d }.join('').to_s }
   end
 
   factory :scope do

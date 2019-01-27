@@ -32,7 +32,7 @@ RSpec.describe "API Devices" do
       end
       describe 'for a new device' do
         before(:each) do
-          get "http://api.example.com/api/devices/11:22:33:44:55:66"
+          get "http://api.example.com/api/devices/112233445566"
         end
         it 'returns status 201' do
           expect(response.status).to eq(201) # :created
@@ -42,10 +42,10 @@ RSpec.describe "API Devices" do
           expect(json.count).to eq(2)
         end
         it 'returns the requested device\'s fields' do
-          device = Device.find_by mac: '11:22:33:44:55:66'
+          device = Device.find_by mac: '112233445566'
           json = JSON.parse(response.body, symbolize_names: true)
           expect(json[:id]).to eq(device.id)
-          expect(json[:mac]).to eq('11:22:33:44:55:66')
+          expect(json[:mac]).to eq('112233445566')
         end
         it 'does not return the created_at field' do
           json = JSON.parse(response.body, symbolize_names: true)

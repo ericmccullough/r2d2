@@ -23,7 +23,7 @@ RSpec.describe 'sweeper', type: :feature do
     old_mac = @sweeper.mac
     fill_in 'Mac', with: '11:11:11:11:11:11'
     click_button 'Save'
-    expect(page.all('td')[2]).to have_content('11:11:11:11:11:11')
+    expect(page.all('td')[2]).to have_content('111111111111')
     expect(page).not_to have_content(old_mac)
   end
   it 'can change the IP'do
@@ -67,7 +67,7 @@ RSpec.describe 'sweeper', type: :feature do
       expect(page.all('td')[1]).to have_content(@sweeper.ip)
       expect(page).not_to have_content('255.255.255.1')
       expect(page.all('td')[2]).to have_content(@sweeper.mac)
-      expect(page).not_to have_content('11:11:11:11:11:11')
+      expect(page).not_to have_content('111111111111')
     end
     it 'redirects to the sweepers page' do
       click_link 'Cancel'
