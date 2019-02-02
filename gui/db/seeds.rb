@@ -21,3 +21,6 @@ List.create([
                { name: 'Blacklist', glyph_id: Glyph.find_by_name('glyphicon-thumbs-down').id }
             ])
 
+Pref.create([
+              { mac_separator: ':', mac_uppercase: true, mac_separators: ':-.' }
+            ])

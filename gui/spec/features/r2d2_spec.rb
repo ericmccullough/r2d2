@@ -26,26 +26,35 @@ RSpec.describe 'r2d2', type: :feature do
         before(:each) do
           click_button('setupdropdownMenu')
         end
-        it 'has a link to Fingerprints' do
-          expect(page).to have_link('Fingerprints', href: fingerprints_path)
-        end
         it 'then clicking the Fingerprints link takes you to the fingerprints page' do
-          click_link('Fingerprints')
-          expect(current_path).to eq('/fingerprints')
-        end
-        it 'has a link to Lists' do
-          expect(page).to have_link('Lists', href: lists_path)
-        end
-        it 'then clicking the Lists link takes you to the lists page' do
-          click_link('Lists')
-          expect(current_path).to eq('/lists')
-        end
-        it 'has a link to Servers' do
-          expect(page).to have_link('Servers', href: servers_path)
+          within('li.dropdown') do
+            click_link('Fingerprints')
+            expect(current_path).to eq('/fingerprints')
+          end
         end
         it 'then clicking the Lists link takes you to the lists page' do
-          click_link('Servers')
-          expect(current_path).to eq('/servers')
+          within('li.dropdown') do
+            click_link('Lists')
+            expect(current_path).to eq('/lists')
+          end
+        end
+        it 'then clicking the Lists link takes you to the lists page' do
+          within('li.dropdown') do
+            click_link('Servers')
+            expect(current_path).to eq('/servers')
+          end
+        end
+        it 'then clicking the Lists link takes you to the l2s2 page' do
+          within('li.dropdown') do
+            click_link('l2s2')
+            expect(current_path).to eq('/l2s2')
+          end
+        end
+        it 'then clicking the MAC link takes you to the prefs page' do
+          within('li.dropdown') do
+            click_link('MAC')
+            expect(current_path).to eq('/prefs')
+          end
         end
       end
     end

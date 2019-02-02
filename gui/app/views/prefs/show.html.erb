@@ -1,0 +1,35 @@
+<% provide(:title, "Remote Rogue Device Detector") %>
+<% provide(:description,  'Prefs') %>
+<div class='col-md-4 col-md-offset-2'>
+  <% flash.each do |message_type, message| %>
+    <div class="alert alert-<%= message_type %>"><%= message %></div>
+  <% end %>
+  <div class="container ">
+    <%= form_for @pref do |f| %>
+      <div class="row">
+        <div class='col-md-2'>
+          <div class="field">
+            <%= f.label 'Mac Separator' %>
+            <%= f.select :mac_separator, options_for_select(@separators, @pref.mac_separator) %>
+          </div>
+        </div>
+
+        <div class='col-md-2'>
+          <div class="field">
+            <%= f.radio_button('mac_uppercase', true) %>
+            <%= f.label 'Uppercase the MAC' %>
+          </div>
+          <div class="field">
+            <%= f.radio_button('mac_uppercase', false) %>
+            <%= f.label 'Lowercase the MAC' %>
+          </div>
+        </div>
+
+        <div class='col-md-2'>
+          <%= f.submit "Save", class: "btn btn-primary pull-right" %>
+          <%= link_to 'Cancel', root_path, class: 'btn btn-default pull-right'%>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

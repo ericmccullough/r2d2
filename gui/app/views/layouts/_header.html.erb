@@ -24,14 +24,14 @@
                 <li><%= link_to "Fingerprints", fingerprints_path %></li>
                 <li><%= link_to "Lists", lists_path %></li>
                 <li><%= link_to "Servers", servers_path %></li>
+                <li><%= link_to 'l2s2', l2s2_path %></li>
+                <li><%= link_to 'MAC', 'prefs/0' %></li>
               </ul>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <% if yield(:title).match('Layer') %>
               <li><%= link_to 'r2d2', '/r2d2' %></li>
-            <% else %>
-              <li><%= link_to 'l2s2', '/l2s2' %></li>
             <% end %>
           </ul>
         </nav>

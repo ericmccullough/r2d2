@@ -111,4 +111,8 @@ FactoryBot.define do
       end
     end
   end
+  factory :pref do
+    mac_separator { ':' }
+    mac_uppercase { true }
+  end
 end

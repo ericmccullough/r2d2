@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'leases#index'
+  resources :prefs, only: [:show, :update]
   resources :servers, only: [:index, :edit, :show, :update, :new, :create, :destroy]
   resources :sweepers, only: [:index, :edit, :show, :update, :new, :create, :destroy]
   resources :sweeps, only: [:index, :show]
