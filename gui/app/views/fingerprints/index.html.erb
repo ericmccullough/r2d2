@@ -12,7 +12,7 @@
     <% end %>
     <table class="table table-striped">
       <thead><tr>
-        <th>Name</th>
+        <th><%= sort_link(@search, :name, "Name") %></th>
         <th>TCP Ports</th>
         <th>UDP Ports</th>
         <th>Shares</th>
