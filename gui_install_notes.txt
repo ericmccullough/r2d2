@@ -76,14 +76,17 @@ rake secret
 export SECRET_KEY_BASE=
 
 #### To run in production:
-rake db:migrate RAILS_ENV=production
+bundle exec rake db:migrate RAILS_ENV=production
+bundle exec rake db:seed RAILS_ENV=production
 RAILS_ENV=production bin/rake assets:precompile
 
-change config/environments/production.rb
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  to
-  config.serve_static_files = true
-to have Rails serve static files
+##### ssh tunnel to the server
+ssh r2d2@<your.IP.goes.here> -L 4567:localhost:3000
 
-##### ssh tunnel to rpi.  set the IP to the rpi's IP
-ssh pi@192.168.100.252 -L 4567:localhost:3000
+bundle exec rails server -e production
+
+# from your workstation browser
+http://localhost:4567
+
+# you should get to the home page
+# with nothing but the default lists and MAC display settings

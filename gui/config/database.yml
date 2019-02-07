@@ -26,8 +26,14 @@ development:
   <<: *default
   database: r2d2_dev
 
-production: # for Heroku
+#production: # for Heroku
+#  <<: *default
+#  host: localhost
+#  username: user
+#  database: app-dev
+
+production:
   <<: *default
   host: localhost
-  username: user
-  database: app-dev
+  username: r2d2
+  database: r2d2_production
