@@ -1,6 +1,7 @@
 class DevicesController < ApplicationController
   def index
     @devices = Device.paginate(page: params[:page])
+    @devices.each {|d| format_mac(d)}
   end
 
   def show
@@ -11,6 +12,9 @@ class DevicesController < ApplicationController
 
   def update
     device = Device.find(params[:id])
+    if params[:mac]
+      device.mac.gsub!(/[^\da-f]/,'')
+    end
     if params[:list]
       device.list = List.find(params[:list])
     end
@@ -23,8 +27,9 @@ class DevicesController < ApplicationController
     redirect_to :back
   end
   #
-  #private
+  private
   #  def device_params
   #    params.require(:device).permit(:list, :notes)
   #  end
+
 end

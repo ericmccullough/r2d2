@@ -10,6 +10,11 @@ RSpec.describe 'r2d2', type: :feature do
     FactoryBot.create(:list, name: 'Whitelist', glyph: thumbs_up)
     FactoryBot.create(:list, name: 'Blacklist', glyph: thumbs_down)
     @server = FactoryBot.create(:server, scope_count: 1)
+    @pref = FactoryBot.create(:pref)
+    separator = @pref.mac_separator
+    @mac = @server.scopes[0].leases[0].device.mac
+    @mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
+    @lcMAC = @mac.downcase
   end
   describe 'GET /r2d2' do
     before(:each) do
@@ -51,9 +56,10 @@ RSpec.describe 'r2d2', type: :feature do
           end
         end
         it 'then clicking the MAC link takes you to the prefs page' do
+          FactoryBot.create(:pref)
           within('li.dropdown') do
             click_link('MAC')
-            expect(current_path).to eq('/prefs')
+            expect(current_path).to eq('/prefs/0')
           end
         end
       end
@@ -99,8 +105,16 @@ RSpec.describe 'r2d2', type: :feature do
         end
       end
       describe 'data row' do
-        it 'has a link to display the details' do
-          expect(page.find_link(@server.scopes[0].leases[0].device.mac, href: "/leases/#{@server.scopes[0].leases[0].id}"))
+        describe 'displays the MAC' do
+          it 'with separators' do
+            expect(page.all('td')[0].text).to match(%r{#{@lcMAC}}i)
+          end
+          it 'with prefered case' #do
+#            expect(page.all('td')[0].text).to match(%r{#{@lcMAC}})
+#          end
+          it 'with a link to display the details' do
+            expect(page.find_link(@mac, href: "/leases/#{@server.scopes[0].leases[0].id}"))
+          end
         end
         describe 'status column displays' do
           it 'a thumbs up icon if on the whitelist' do
@@ -233,13 +247,13 @@ RSpec.describe 'r2d2', type: :feature do
   describe 'clicking a DHCP MAC link' do
     before(:each) do
       visit '/r2d2'
-      click_link "#{@server.scopes[0].leases[0].device.mac}"
+      click_link @mac
     end
     it 'takes you to /leases/:id' do
       expect(current_path).to eq("/leases/#{@server.scopes[0].leases[0].id}")
     end
     it 'displays the lease MAC in the description in the navbar' do
-      expect(page.all('.navbar-text')[0]).to have_content(@server.scopes[0].leases[0].device.mac)
+      expect(page.all('.navbar-text')[0]).to have_content(@mac)
     end
     describe 'displays the device' do
       it 'list' do
@@ -249,7 +263,7 @@ RSpec.describe 'r2d2', type: :feature do
         @server.scopes[0].leases[0].device.notes = 'This is a test'
         @server.scopes[0].leases[0].device.save!
         visit '/r2d2'
-        click_link "#{@server.scopes[0].leases[0].device.mac}"
+        click_link @mac
         expect(find_field('device_notes').value).to eq('This is a test')
       end
       it 'fingerprint details'
@@ -264,6 +278,8 @@ RSpec.describe 'r2d2', type: :feature do
         click_button('Update Notes')
         expect(find_field('device_notes').value).to eq('This is NOT a test')
       end
+      it 'displays a success message'
+      it 'displays a error message'
     end
     describe 'displays the lease' do
       it 'name' do
