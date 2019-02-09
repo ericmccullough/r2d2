@@ -12,7 +12,7 @@ RSpec.describe 'r2d2', type: :feature do
     @server = FactoryBot.create(:server, scope_count: 1)
     @pref = FactoryBot.create(:pref)
     separator = @pref.mac_separator
-    @mac = @server.scopes[0].leases[0].device.mac
+    @mac = @server.scopes[0].leases[0].device.mac.dup
     @mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
     @lcMAC = @mac.downcase
   end
@@ -59,7 +59,8 @@ RSpec.describe 'r2d2', type: :feature do
           FactoryBot.create(:pref)
           within('li.dropdown') do
             click_link('MAC')
-            expect(current_path).to eq('/prefs/0')
+            id = @pref.id.to_s
+            expect(current_path).to eq('/prefs/'+id)
           end
         end
       end

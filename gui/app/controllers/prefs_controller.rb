@@ -1,4 +1,8 @@
 class PrefsController < ApplicationController
+  def index
+    redirect_to action: "show", id: Pref.first.id
+  end
+    
   def show
     @pref = Pref.first
     @separators = @pref.mac_separators.split('').map { |s| [s,s] } #[[':', ':'], ['-', '-'], ['.', '.']]
