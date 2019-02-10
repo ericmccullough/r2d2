@@ -1,12 +1,13 @@
 # install the OS, Ubuntu server 16.04 was used for this setup
+# Create the r2d2 user during the installation
 # Internet access is needed for initial install
 
 ####  set proxy if needed
-export http_proxy=http://192.168.100.254:8080
-export https_proxy=http://192.168.100.254:8080
+export http_proxy=http://<your proxy IP/name here>:<port>
+export https_proxy=http://<your proxy IP/name here>:<port>
 
 # update the local apt repo to the latest
-# edit /etc/apt/sources.list and remove the cdrom line
+# may need to edit /etc/apt/sources.list and remove the cdrom line
 sudo apt-get update
 
 sudo apt-get install openssh-server

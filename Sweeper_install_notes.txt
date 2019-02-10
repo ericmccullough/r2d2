@@ -1,0 +1,58 @@
+# this is for a l2s2 sweeper, not the GUI
+# install the OS, Raspian Jessie was used for this setup
+# Internet access is needed for initial install
+
+# install rpi image, Google it :)
+#### first-time, one-time config. These may change with different versions
+sudo raspi-config
+# expand fs
+# change pwd
+# change hostname
+# reboot
+
+#### enable ssh server
+# ssh into the pi with a reverse tunnel
+# presuming your GUI is running on port 3000
+# replace the first 3000 with your GUI servers port if different
+ssh <user>@<IP> -R 3000:localhost:3000
+
+####  set proxy if needed
+export http_proxy=http://<your proxy here>:<port>
+export https_proxy=http://<your proxy here>:<port>
+
+# update the local apt repo to the latest
+# may need to edit /etc/apt/sources.list and remove the cdrom line
+sudo apt-get update
+
+# install git
+sudo apt-get git
+
+# be in the directory you want the r2d2 directory installed into then
+git clone -b gui --single-branch https://github.com/ericmccullough/r2d2.git
+cd r2d2
+
+##### perl modules for sweeper
+sudo apt-get install libjson-perl
+sudo apt-get install libnet-pcap-perl
+sudo apt-get install libnetpacket-perl?
+sudo apt-get install libnet-libdnet-perl
+in perl -MCPAN -e shell
+  # accept defaults for first time run.
+  install ANDYA/Net-CIDR-Set-0.13.tar.gz
+  install M/MU/MUIR/modules/Net-Netmask-1.9022.tar.gz
+  install L/LD/LDS/IO-Interface-1.09.tar.gz
+  install E/ET/ETHER/libwww-perl-6.15.tar.gz
+
+# edit the hosts file to add:
+# or add the GUI's IP to your DNS server
+# the sweeper uses api.r2d2.com
+# probably should change that to a config option, later
+127.0.1.1	r2d2
+127.0.0.1	api.r2d2.com
+127.0.0.1	r2d2.com
+
+# in the GUI, to add an l2s2 Sweeper you need the MAC and IP
+ifconfig
+# run the sweeper when you are ready to send sweeps to the GUI
+perl sweeper.pl
+
