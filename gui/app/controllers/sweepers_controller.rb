@@ -1,6 +1,7 @@
 class SweepersController < ApplicationController
   def index
     @sweepers = Sweeper.paginate(page: params[:page])
+    @sweepers.each {|s| format_mac(s)}
   end
 
   def edit
@@ -30,6 +31,7 @@ class SweepersController < ApplicationController
   def create
     @sweeper = Sweeper.new(sweeper_params)
     if @sweeper.save
+      format_mac(@sweeper)
       flash[:success] = "Added new sweeper #{@sweeper.mac}"
       redirect_to sweepers_path
     else
@@ -49,5 +51,16 @@ class SweepersController < ApplicationController
   private
     def sweeper_params
       params.require(:sweeper).permit(:mac, :ip, :description)
+    end
+
+    def format_mac(sweeper)
+      separator = Pref.first.mac_separator
+      sweeper.mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
+      unless Pref.first.mac_uppercase
+        if sweeper.mac.index(/[A-F]/)
+          sweeper.mac.downcase!
+        end
+      end
+      sweeper
     end
 end

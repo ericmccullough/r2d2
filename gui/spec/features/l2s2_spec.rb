@@ -46,6 +46,10 @@ RSpec.describe "l2s2", type: :feature do
         describe 'data row' do
           let!(:sweeper) { FactoryBot.create(:sweeper) }
           before(:each) do
+            @pref = FactoryBot.create(:pref)
+            separator = @pref.mac_separator
+            @mac = sweeper.mac.dup
+            @mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
             visit "/sweepers"
           end
           it 'has a link to display the sweeper details' do
@@ -57,8 +61,14 @@ RSpec.describe "l2s2", type: :feature do
           it 'displays the sweeper IP address' do
             expect(page.all('td')[1]).to have_content(sweeper.ip)
           end
-          it 'displays the sweeper MAC address' do
-            expect(page.all('td')[2]).to have_content(sweeper.mac)
+          describe 'displays the sweeper MAC address' do
+            it 'with separators' do
+              expect(page.all('td')[2].text).to match(%r{#{@mac}}i)
+            end
+            it 'with prefered case' #do
+#              expect(page.all('td')[0].text).to match(%r{#{@lcMAC}})
+#            end
+            #expect(page.all('td')[2]).to have_content(sweeper.mac)
           end
           describe 'the action field' do
             it 'displays the edit icon' do
@@ -80,12 +90,6 @@ RSpec.describe "l2s2", type: :feature do
               end
             end
             describe 'clicking the delete icon', :js => true do
-              before(:all) do
-                Capybara.current_driver = :webkit
-              end
-              after(:all) do
-                Capybara.use_default_driver
-              end
               before(:each) do
                 @delete_sweeper = FactoryBot.create(:sweeper)
                 visit sweepers_path
@@ -119,7 +123,7 @@ RSpec.describe "l2s2", type: :feature do
               it 'does not delete the sweeper if cancelled' do
                 click_button('Cancel')
                 visit sweepers_path
-                expect(page).to have_content(@delete_sweeper.mac)
+                expect(page).to have_content(@mac)
               end
             end
           end
@@ -132,6 +136,7 @@ RSpec.describe "l2s2", type: :feature do
       end
       describe 'big table' do
         before(:each) do
+          @pref = FactoryBot.create(:pref)
           11.times { FactoryBot.create(:sweeper) }
           visit "/sweepers"
         end
@@ -142,6 +147,7 @@ RSpec.describe "l2s2", type: :feature do
       describe 'clicking a sweeper description' do
         let!(:sweeper) { FactoryBot.create(:sweeper) }
         before(:each) do
+          @pref = FactoryBot.create(:pref)
           visit '/sweepers'
           click_link(sweeper.description)
         end

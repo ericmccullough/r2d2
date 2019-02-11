@@ -75,6 +75,7 @@ RSpec.describe "l2s2 sweep", type: :feature do
   end
   describe 'Get /sweeps/:id' do
     let!(:sweep) { FactoryBot.create(:sweep) }
+    let!(:pref) { FactoryBot.create(:pref) }
     before(:each) { visit "/sweeps/#{sweep.id}" }
     it 'should have the sweep description in the navbar' do
       expect(page.all('.navbar-text')[0]).to have_content(sweep.description)
@@ -98,10 +99,16 @@ RSpec.describe "l2s2 sweep", type: :feature do
       end
       describe 'data row' do
         it 'should have a link to display the details' do
-          expect(page.find_link(sweep.nodes[0].mac,"/nodes/#{sweep.nodes[0].id}"))
+          separator = pref.mac_separator
+          mac = sweep.nodes[0].mac.dup
+          mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
+          expect(page.find_link(mac,"/nodes/#{sweep.nodes[0].id}"))
         end
         it 'should display the MAC' do
-          expect(page.all('td')[0]).to have_content(sweep.nodes[0].mac)
+          separator = pref.mac_separator
+          mac = sweep.nodes[0].mac.dup
+          mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
+          expect(page.all('td')[0]).to have_content(mac)
         end
         it 'should display the IP' do
           expect(page.all('td')[1]).to have_content(sweep.nodes[0].ip)
@@ -122,10 +129,14 @@ RSpec.describe "l2s2 sweep", type: :feature do
     end
   end
   describe 'clicking MAC of a /sweeps/:id item' do
+    let!(:pref) { FactoryBot.create(:pref) }
     let!(:sweep) { FactoryBot.create(:sweep) }
     before(:each) do
+      separator = pref.mac_separator
+      mac = sweep.nodes[0].mac.dup
+      mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
       visit "/sweeps/#{sweep.id}"
-      click_link(sweep.nodes[0].mac)
+      click_link(mac)
     end
     it 'should go to /nodes/:id' do
       expect(current_path).to eq("/nodes/#{sweep.nodes[0].id}")

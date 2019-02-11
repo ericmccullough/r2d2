@@ -4,6 +4,7 @@ RSpec.describe 'sweeper', type: :feature do
   describe 'edit page' do
   end
   before(:each) do
+    @pref = FactoryBot.create(:pref)
     @sweeper = FactoryBot.create(:sweeper)
     visit edit_sweeper_path(@sweeper)
   end
@@ -21,9 +22,12 @@ RSpec.describe 'sweeper', type: :feature do
   end
   it 'can change the MAC' do
     old_mac = @sweeper.mac
-    fill_in 'Mac', with: '11:11:11:11:11:11'
+    new_mac = '111111111111'
+    fill_in 'Mac', with: new_mac
+    separator = @pref.mac_separator
+    new_mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
     click_button 'Save'
-    expect(page.all('td')[2]).to have_content('111111111111')
+    expect(page.all('td')[2]).to have_content(new_mac)
     expect(page).not_to have_content(old_mac)
   end
   it 'can change the IP'do
@@ -58,6 +62,8 @@ RSpec.describe 'sweeper', type: :feature do
   end
   describe 'clicking cancel' do
     it 'does not change the sweeper' do
+      separator = @pref.mac_separator
+      @sweeper.mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
       fill_in 'Description', with: 'fred'
       fill_in 'Mac', with: '11:11:11:11:11:11'
       fill_in 'Ip', with: '255.255.255.1'

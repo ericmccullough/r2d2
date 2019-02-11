@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'sweeper', type: :feature do
   describe 'new page' do
     before(:each) do
+      @pref = FactoryBot.create(:pref)
       visit new_sweeper_path
     end
     it 'has the new url' do
@@ -29,7 +30,8 @@ RSpec.describe 'sweeper', type: :feature do
       describe 'adds it to the sweepers' do
         before(:each) do
           visit new_sweeper_path
-          fill_in 'sweeper_mac', with: '11:22:33:44:55:66'
+          @mac = '112233445566'
+          fill_in 'sweeper_mac', with: @mac
           fill_in 'sweeper_description', with: '1.1.1.0/24'
           fill_in 'sweeper_ip', with: '1.1.1.1'
         end
@@ -39,8 +41,10 @@ RSpec.describe 'sweeper', type: :feature do
           expect(Sweeper.count).to eq(sweeper_count+1)
         end
         it 'displays success message' do
+          separator = @pref.mac_separator
+          @mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
           click_button 'Save'
-          expect(page).to have_content("Added new sweeper 112233445566")
+          expect(page).to have_content("Added new sweeper #{@mac}")
         end
         it 'saves the MAC' do
           click_button 'Save'
