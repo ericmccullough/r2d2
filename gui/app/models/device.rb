@@ -18,7 +18,8 @@ class Device < ActiveRecord::Base
   
   def vendor
     begin
-      vendor_name = Vendor.find_by(oui: self.mac[0..5]).name
+      mac = self.mac.upcase.gsub(/[-:\.]/,'')
+      vendor_name = Vendor.find_by(oui: mac[0..5]).name
     rescue
       if !vendor_name
         vendor_name = 'UNKNOWN'

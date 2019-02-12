@@ -46,7 +46,6 @@ RSpec.describe Node, type: :model do
     expect(node.mac).to eq('001FF3CD62F2')
   end
 
-  it "should we remove the colons from the mac?"
   it "should have a unique mac?"
   it "is valid if required fields are set" do
     node = Node.new(mac: '00:1f:f3:cd:62:d2', ip: '192.168.1.1')

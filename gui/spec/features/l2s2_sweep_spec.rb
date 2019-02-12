@@ -114,7 +114,11 @@ RSpec.describe "l2s2 sweep", type: :feature do
           expect(page.all('td')[1]).to have_content(sweep.nodes[0].ip)
         end
         it 'should display the Vendor' do
-          expect(page.all('td')[2]).to have_content(sweep.nodes[0].vendor)
+          Vendor.create(name: 'The Republic', oui: '001FF3')
+          sweep.nodes[0].mac = '001FF3112233'
+          sweep.save
+          visit "/sweeps/#{sweep.id}"
+          expect(page.all('td')[2]).to have_content('The Republic')
         end
       end
     end

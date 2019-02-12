@@ -24,3 +24,4 @@ List.create([
 Pref.create([
               { mac_separator: ':', mac_uppercase: true, mac_separators: ':-.' }
             ])
+
