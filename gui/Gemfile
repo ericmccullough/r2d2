@@ -18,6 +18,8 @@ gem 'jbuilder', '~> 2.0'
 # the netaddr 2 rewrite does not include CIDR.
 gem 'netaddr', '1.5.1'
 gem 'ransack'
+# maybe SyslogLogger should be production only?
+gem 'SyslogLogger'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
