@@ -2,6 +2,8 @@
 # Create the r2d2 user during the installation
 # Internet access is needed for initial install
 
+# make sure the r2d2 user is in the sudoers group
+
 ####  set proxy if needed
 export http_proxy=http://<your proxy IP/name here>:<port>
 export https_proxy=http://<your proxy IP/name here>:<port>
@@ -43,10 +45,10 @@ sudo apt-add-repository -y ppa:rael-gc/rvm
 sudo apt-get update
 sudo apt-get install rvm
 
-# exit and relogin to get profile changes
+# exit and relogin as r2d2 to get profile changes
 
 # install git
-sudo apt-get git
+sudo apt-get install git
 
 # install ruby 2 and rails 4
 rvm install ruby-2.4.3
@@ -67,7 +69,7 @@ https://api.github.com/repos/mozilla/geckodriver/releases/latest
 # load the dependencies, may take a while
 bundle install
 
-# edit the r2d2/gui/config/database.yml and change the password to the r2d2 sql user's password
+# edit the r2d2/gui/config/database.yml and change the password to the r2d2 Postgres user's password
 
 # rake db:create
 rake db:schema:load
@@ -81,7 +83,9 @@ bundle exec rake db:migrate RAILS_ENV=production
 bundle exec rake db:seed RAILS_ENV=production
 RAILS_ENV=production bin/rake assets:precompile
 
-##### ssh tunnel to the server
+#### logout of server
+exit
+#### ssh with a tunnel to the server
 ssh r2d2@<your.IP.goes.here> -L 4567:localhost:3000
 
 bundle exec rails server -e production
