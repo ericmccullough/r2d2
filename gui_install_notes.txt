@@ -13,6 +13,11 @@ export https_proxy=http://<your proxy IP/name here>:<port>
 sudo apt-get update
 
 sudo apt-get install openssh-server
+
+#
+# Snapshot the VM if you are using virtualization
+#
+
 # ssh into the box, you'll want to be able to scroll back
 ssh r2d2@<your.IP.goes.here>
 ##### GUI Install
@@ -85,6 +90,11 @@ RAILS_ENV=production bin/rake assets:precompile
 
 #### logout of server
 exit
+
+#
+# Snapshot the VM if you are using virtualization
+#
+
 #### ssh with a tunnel to the server
 ssh r2d2@<your.IP.goes.here> -L 4567:localhost:3000
 
