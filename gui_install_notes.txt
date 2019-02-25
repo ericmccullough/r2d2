@@ -57,10 +57,11 @@ sudo apt-get install git
 
 # install ruby 2 and rails 4
 rvm install ruby-2.4.3
+gem install bundler
 gem install rails --version=4.2.10 --no-document
 # be in the directory you want the r2d2 directory installed into then
 git clone -b gui --single-branch https://github.com/ericmccullough/r2d2.git
-cd r2d2
+cd r2d2/gui
 #
 # OPTIONAL: for testing, may need to install Selenium webdriver/geckodriver.
 https://api.github.com/repos/mozilla/geckodriver/releases/latest
