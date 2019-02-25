@@ -1,5 +1,5 @@
 <div class='row'>
-  <h2>Device</h2>
+  <h2>Device <%= device.mac %></h2>
   <div class='col-md-4'>
     <% @device = device %>
     <% if device.list.name.match('Unassigned') %>
@@ -10,8 +10,9 @@
       <% list_color = 'text-danger' %>
     <% else list_color = 'text-warning' %>
     <% end %>
-    <span class="glyphicon <%= device.list.glyph %> <%= list_color %>" aria-hidden="true"></span> 
-    <%= @device.list.name %>
+    List: <span class="glyphicon <%= device.list.glyph.name %> <%= list_color %>" aria-hidden="true"></span> 
+    <%= @device.list.name %><br>
+    Vendor: <%= @device.vendor %>
   </div>
   <div class='col-md-8'>
     <%= form_for @device do |f| %>

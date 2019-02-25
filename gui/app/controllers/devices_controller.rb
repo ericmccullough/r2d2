@@ -28,6 +28,16 @@ class DevicesController < ApplicationController
   end
   #
   private
+    def format_mac(device)
+      separator = Pref.first.mac_separator
+      device.mac.insert(10, separator).insert(8, separator).insert(6, separator).insert(4, separator).insert(2, separator)
+      unless Pref.first.mac_uppercase
+        if device.mac.index(/[A-F]/)
+          device.mac.downcase!
+        end
+      end
+      device
+    end
   #  def device_params
   #    params.require(:device).permit(:list, :notes)
   #  end
