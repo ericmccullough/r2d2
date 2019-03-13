@@ -31,9 +31,9 @@ sub getADnames {
   # get computer names from AD
   my $dcs = shift;
   my $hashref = shift;
-    my $DSQUERY;
+  my $DSQUERY;
   foreach my $dc (keys(%$dcs)) {
-    open ($DSQUERY, "dsquery.exe * ".$$dcs->$dc." -s $dc -filter \"(&(samaccounttype=805306369))\" -limit 0|") 
+    open ($DSQUERY, "dsquery.exe * ".$$dcs{$dc}." -s $dc -filter \"(&(samaccounttype=805306369))\" -limit 0|") 
       or warn "Unable to get computer names from $dc\n";
     if ($DSQUERY) {
       print STDERR "Loading Computer names from $dc\nNames not loaded will be displayed\n";
@@ -49,7 +49,7 @@ sub getADnames {
       printandpush("Number of computer names loaded from $dc is $count\n");
     }
     # get printer names from AD
-    open ($DSQUERY, "dsquery.exe * ".$$dcs->$dc." -s $dc -filter \"(&(objectClass=PrintQueue))\" -limit 0 -attr PrinterName|")
+    open ($DSQUERY, "dsquery.exe * ".$$dcs{$dc}." -s $dc -filter \"(&(objectClass=PrintQueue))\" -limit 0 -attr PrinterName|")
       || warn "Unable to get printer names from $dc\n";
     if ($DSQUERY) {
       print STDERR "Loading Printer names from $dc\nNames not loaded will be displayed\n";
