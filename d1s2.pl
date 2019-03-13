@@ -11,8 +11,10 @@ use c3p0; # shared subroutines
 my $user = "mcculloughs/eric mccullough%p1izzaR2d2!"; # use kerberos?
 my ($year, $mon, $mday, $hour, $min);
 
-my @dhcpservers = get_dhcp_servers(); # ('192.168.100.66',); # get from server?
-#print "server = $dhcpservers[0]{'ip'}\n";
+my @dhcpservers = get_dhcp_servers();
+#foreach my $server_hash (@dhcpservers) {
+#  print STDERR "Loaded server named $$server_hash{'name'} with IP $$server_hash{'ip'} and an ID of $$server_hash{'id'} \n";
+#}
 
 my %host_list;
 my %ip_list;
@@ -163,18 +165,20 @@ foreach my $server_hash (@dhcpservers) {
           # each record has the following format
           # IP Address      - Subnet Mask    - Unique ID           - Lease Expires        -Type -Name
           # 14.15.14.12  - 255.255.252.0  - 00-1a-4b-18-02-8a   -5/9/2010 9:20:44 AM    -D-  P-3D1053.com
+          # 192.168.100.10  - 255.255.255.0  - eb-50-be-e6-00-01-00-2/25/2019 6:08:03 PM   -D-  r2d2.mcculloughs.info
           if ( ($ip, $mask, $dhcpmac, $expiration, $kind, $name)  # has normal lease date/time
               = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*-\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*-\s*(.{17})\s*-\s*([0-9\/]+\s*[\d:]+\s*[AP]M)\s*-([DBURN])-\s*(.+)/ ) {
           } elsif ( ($ip, $mask, $dhcpmac, $expiration, $kind, $name) # has NEVER EXPIRES, INACTIVE, in lease field
               = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*- (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*-\s*(.{17})\s*-\s*([\s\w]+)\s*-([DBURN])-\s*(.+)/ ) {
             while ($expiration =~ s/\s$//g) {}
-          }
+          } elsif ( ($ip, $mask, $dhcpmac, $expiration, $kind, $name)  # has unique id that is longer than the MAC
+              = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*-\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*-\s*(.{17})-[a-f\d]{2}-([0-9\/]+\s*[\d:]+\s*[AP]M)\s*-([DBURN])-\s*(.+)/ ) {
           if (defined $ip) {
             $dhcpmac = uc($dhcpmac); # upper case the letters in the MAC
             $dhcpmac =~ s/ //g; # remove spaces from the MAC
-            $dhcpmac =~ s/-/:/g;
-            $device = get_device($dhcpmac); # from the API
+            $dhcpmac =~ s/-//g;
             
+            $device = get_device($dhcpmac); # from the API
             $name =~ s/\.$//; # remove trailing '.' from host name
             $name =~ s/\s//g; # remove whitespace from host name
             $name = uc($name); # upper case the host name
