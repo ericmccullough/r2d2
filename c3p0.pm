@@ -153,7 +153,7 @@ sub getvendor {
 
 sub updatevendorlist {
   my $OUT;
-  my $content = get("http://standards.ieee.org/regauth/oui/oui.txt");
+  my $content = get("http://standards-oui.ieee.org/oui.txt");
   die "Couldn't get it!" unless defined $content;
   my @lines = split /\n/,$content;
   if (-e "vendor.txt") {
