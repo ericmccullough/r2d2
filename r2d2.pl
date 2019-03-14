@@ -371,7 +371,7 @@ while (1) {
   }
   gettime();
   print STDERR "Completed at $hour:$min of $mon/$mday/$year\n";
-  undef undef %scopes; undef %reservedips; undef $totalscopes;
+  undef @scopelist; undef %scopes; undef %reservedips; undef $totalscopes;
   undef %whitelist; undef %blacklist; undef %sccmMac;
   undef %hostList; undef %ipList; undef %macList; undef @notable; undef %adcomputer;
   if ($sleeptime == 0) { exit; }
